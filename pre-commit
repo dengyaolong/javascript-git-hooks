@@ -1,0 +1,21 @@
+#!/bin/sh
+# Redirect output to stderr.
+exec 1>&2
+# enable user input
+exec < /dev/tty
+
+FORBIDDEN='console.log'
+
+count=$(git diff --cached --name-only | GREP_COLOR='4;5;37;41' xargs grep --color --with-filename -n $FORBIDDEN | wc -l)
+if [ "$count" -gt 0 ]
+then
+  git diff --cached --name-only | GREP_COLOR='4;5;37;41' xargs grep --color --with-filename -n $FORBIDDEN
+  read -p '有console.log未删除，强行提交(y/n)' y
+  echo $y | grep ^[Yy]$
+  if [ $? -eq 0 ] 
+  then
+    exit 0; #THE USER WANTS TO CONTINUE
+  else
+    exit 1; # THE USER DONT WANT TO CONTINUE SO ROLLBACK
+  fi
+fi
