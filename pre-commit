@@ -10,7 +10,7 @@ count=$(git diff --cached --name-only | GREP_COLOR='4;5;37;41' xargs grep --colo
 if [ "$count" -gt 0 ]
 then
   git diff --cached --name-only | GREP_COLOR='4;5;37;41' xargs grep --color --with-filename -n $FORBIDDEN
-  read -p '有console.log未删除，强行提交(y/n)' y
+  read -p 'Found "console.log" references in your javascript，continue?(y/n)' y
   echo $y | grep ^[Yy]$
   if [ $? -eq 0 ] 
   then
